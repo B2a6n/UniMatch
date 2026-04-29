@@ -143,6 +143,44 @@ function calcMatch(userSkills, projectSkills) {
     return Math.round((matches.length / projectSkills.length) * 100);
 }
 
+/**
+ * MÉTODO DE PRUEBA DE CONGRUENCIA ESTADÍSTICA: Similitud del Coseno
+ * 
+ * Este método trata las habilidades como vectores en un espacio multidimensional 
+ * y calcula el coseno del ángulo entre ellos.
+ */
+function calcMatchCosineSimilarity(userSkills, projectSkills) {
+    if (!userSkills || !projectSkills || projectSkills.length === 0) return 0;
+
+    // 1. Crear un corpus único de todas las habilidades involucradas
+    const allSkillsSet = new Set([
+        ...userSkills.map(s => s.toLowerCase()), 
+        ...projectSkills.map(s => s.toLowerCase())
+    ]);
+    const corpus = Array.from(allSkillsSet);
+
+    // 2. Crear los vectores (1 si tiene la habilidad, 0 si no)
+    const vectorUser = corpus.map(skill => userSkills.map(s => s.toLowerCase()).includes(skill) ? 1 : 0);
+    const vectorProject = corpus.map(skill => projectSkills.map(s => s.toLowerCase()).includes(skill) ? 1 : 0);
+
+    // 3. Calcular el producto punto
+    let dotProduct = 0;
+    for (let i = 0; i < corpus.length; i++) {
+        dotProduct += vectorUser[i] * vectorProject[i];
+    }
+
+    // 4. Calcular la magnitud de cada vector
+    const magnitudeUser = Math.sqrt(vectorUser.reduce((sum, val) => sum + (val * val), 0));
+    const magnitudeProject = Math.sqrt(vectorProject.reduce((sum, val) => sum + (val * val), 0));
+
+    if (magnitudeUser === 0 || magnitudeProject === 0) return 0;
+
+    // 5. Calcular la similitud del coseno y convertirla a porcentaje (0-100)
+    const cosineSimilarity = dotProduct / (magnitudeUser * magnitudeProject);
+    
+    return Math.round(cosineSimilarity * 100);
+}
+
 function renderStars(n, max = 5) {
     let html = '';
     for (let i = 1; i <= max; i++) {
