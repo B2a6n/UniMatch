@@ -1,0 +1,28 @@
+# Java / Maven
+target/
+*.log
+*.tmp
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs
+.vscode/
+.idea/
+*.iml
+
+# Local environment
+.venv/
+*.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# ngrok
+ngrok.log
+
+# Temporary files
+*.swp
+*~
