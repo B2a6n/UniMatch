@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================
+  Archivo: pom.xml
+  Resumen: Archivo de configuración de Maven.
+  Gestiona las dependencias del proyecto (Spring Boot, Spring Data JPA,
+  controladores de base de datos MySQL/PostgreSQL, seguridad) y los plugins de compilación.
+  ============================================
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -86,13 +94,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-
-        <!-- H2 para desarrollo local (opcional, alternativa a Oracle) -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

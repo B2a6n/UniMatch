@@ -1,6 +1,9 @@
 /* ============================================
-   UniMatch — Sistema de Diseño Completo
-   ============================================ */
+ * Archivo: style.css
+ * Resumen: Hoja de estilos principal de la aplicación.
+ * Define el sistema de diseño completo (variables, reset, navbar, botones, modales)
+ * y proporciona utilidades y layouts para componentes de UI específicos.
+ * ============================================ */
 
 /* 1. Variables Globales */
 :root {

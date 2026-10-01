@@ -1,13 +1,17 @@
-// ============================================
-// UniMatch — Auth Module (Landing, Login, Registro)
-// Usa REST API en lugar de Firebase
-// ============================================
-
+/**
+ * ============================================
+ * Archivo: auth.js
+ * Resumen: Módulo de Autenticación y Vistas Públicas.
+ * Maneja la Landing Page, Login y el proceso de Registro multi-paso.
+ * Se comunica con la API REST del backend para la validación y creación de usuarios.
+ * ============================================
+ */
 const Auth = {
 
-    // ==========================================
-    // LANDING PAGE: Página de inicio pública para usuarios no logueados
-    // ==========================================
+    /**
+     * LANDING PAGE: Página de inicio pública para usuarios no logueados.
+     * Muestra la presentación del sistema y botones de acceso.
+     */
     renderLanding() {
         const app = document.getElementById('app');
         app.innerHTML = `
@@ -80,12 +84,12 @@ const Auth = {
                 </div>
                 <div class="features-grid">
                     <div class="feature-card">
-                        <div class="feature-icon" style="background: rgba(37, 99, 235, 0.15); color: #2563EB;">🔍</div>
+                        <div class="feature-icon" style="background: rgba(84,131,179,0.15); color: #5483B3;">🔍</div>
                         <h3>Matching Inteligente</h3>
                         <p>Algoritmo que conecta tus habilidades con los proyectos que más te necesitan. Encuentra tu match perfecto.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon" style="background: rgba(59, 130, 246, 0.15); color: #3B82F6;">👥</div>
+                        <div class="feature-icon" style="background: rgba(193,232,255,0.15); color: #C1E8FF;">👥</div>
                         <h3>Equipos Eficientes</h3>
                         <p>Forma equipos multidisciplinarios con estudiantes de distintas carreras y semestres.</p>
                     </div>
@@ -403,7 +407,7 @@ const Auth = {
                             <div id="reg-skills-tags" class="tags-container mb-8"></div>
                         </div>
 
-                        <div id="reg-error" style="color:#ef4444; background:rgba(239,68,68,0.08); padding:10px; border-radius:8px; font-size:0.85rem; margin-bottom:12px; display:none; border: 1px solid rgba(239,68,68,0.2);"></div>
+                        <div id="reg-error" style="color:white; background:rgba(255,50,50,0.2); padding:10px; border-radius:8px; font-size:0.85rem; margin-bottom:12px; display:none; border: 1px solid rgba(255,255,255,0.3);"></div>
 
                         <div style="margin-top:24px;">
                             <div class="form-actions">

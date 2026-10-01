@@ -1,7 +1,11 @@
-// ============================================
-// UniMatch — SPA Router & App Core
-// Usa REST API en lugar de Firebase Auth
-// ============================================
+/**
+ * ============================================
+ * Archivo: app.js
+ * Resumen: Este archivo es el núcleo de la Single Page Application (SPA).
+ * Gestiona el enrutador principal, la inicialización de la app,
+ * la sesión del usuario y la renderización de la barra de navegación.
+ * ============================================
+ */
 
 const App = {
     currentUser: null,
@@ -23,8 +27,12 @@ const App = {
         '/concluidos': () => Projects.renderConcluidos(),
     },
 
+    // Configuración de rutas protegidas que requieren sesión iniciada
     protectedRoutes: ['/dashboard', '/publicar', '/mis-proyectos', '/editar-proyecto', '/proyecto', '/solicitudes', '/finalizar', '/chat', '/perfil', '/concluidos'],
 
+    /**
+     * Inicializa la aplicación: restaura la sesión si existe y configura eventos.
+     */
     async init() {
         // Intentar restaurar sesión desde localStorage
         const storedUser = API.getStoredUser();
@@ -47,6 +55,10 @@ const App = {
         window.addEventListener('hashchange', () => App.handleRoute());
     },
 
+    /**
+     * Lógica principal del enrutador. 
+     * Lee el fragmento (hash) de la URL y decide qué vista renderizar.
+     */
     handleRoute() {
         const hash = window.location.hash || '#/';
         const [path, ...params] = hash.slice(1).split('/').filter(Boolean);
@@ -80,6 +92,10 @@ const App = {
         }
     },
 
+    /**
+     * Renderiza la barra de navegación principal dependiendo de si 
+     * hay un usuario logueado o no.
+     */
     renderNavbar() {
         const navbar = document.getElementById('navbar');
 
@@ -121,6 +137,9 @@ const App = {
         }
     },
 
+    /**
+     * Cierra la sesión del usuario actual limpiando el almacenamiento.
+     */
     logout() {
         API.clearToken();
         App.currentUser = null;
@@ -129,6 +148,9 @@ const App = {
         showToast('Sesión cerrada', 'success');
     },
 
+    /**
+     * Método utilitario para navegar a una ruta específica.
+     */
     navigate(hash) {
         window.location.hash = hash;
     }

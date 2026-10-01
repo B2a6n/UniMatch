@@ -1,13 +1,17 @@
-// ============================================
-// UniMatch — Projects Module (REST API)
-// ============================================
-
+/**
+ * ============================================
+ * Archivo: projects.js
+ * Resumen: Módulo central para la gestión de proyectos.
+ * Controla el Dashboard, visualización, creación, edición,
+ * solicitudes de unión, y el flujo de finalización de proyectos.
+ * ============================================
+ */
 const Projects = {
 
-    // ==========================================
-    // DASHBOARD: Renderiza la vista principal del usuario
-    // Incluye proyectos recomendados (activos) y concluidos
-    // ==========================================
+    /**
+     * DASHBOARD: Renderiza la vista principal del usuario logueado.
+     * Muestra proyectos recomendados (basados en sus habilidades) y proyectos concluidos recientes.
+     */
     async renderDashboard() {
         const app = document.getElementById('app');
         const user = App.currentUser;
@@ -176,7 +180,7 @@ const Projects = {
                         <form id="pub-form" onsubmit="Projects.handlePublicar(event)">
                             <div class="form-section">
                                 <div class="section-icon-title">
-                                    <div class="sec-icon" style="background:rgba(37,99,235,0.1);color:#2563EB">📋</div>
+                                    <div class="sec-icon" style="background:rgba(84,131,179,0.15);color:#5483B3">📋</div>
                                     <div><h3>Información Básica</h3><p>Describe tu proyecto de forma clara</p></div>
                                 </div>
                                 <div class="input-group">
@@ -237,7 +241,7 @@ const Projects = {
 
                             <div class="form-section">
                                 <div class="section-icon-title">
-                                    <div class="sec-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6">⭐</div>
+                                    <div class="sec-icon" style="background:rgba(193,232,255,0.15);color:#C1E8FF">⭐</div>
                                     <div><h3>Habilidades Requeridas</h3><p>Busca colaboradores mediante el árbol de habilidades</p></div>
                                 </div>
                                 
@@ -269,7 +273,7 @@ const Projects = {
                                 <label class="checkbox-group"><input type="checkbox" id="pub-necesita-asesor"> Sí, me gustaría que un maestro asesore este proyecto</label>
                             </div>
 
-                            <div id="pub-error" style="color:#ef4444; background:rgba(239,68,68,0.08); padding:10px; border-radius:8px; font-size:0.85rem; margin-bottom:12px; display:none; border: 1px solid rgba(239,68,68,0.2);"></div>
+                            <div id="pub-error" style="color:white; background:rgba(255,50,50,0.2); padding:10px; border-radius:8px; font-size:0.85rem; margin-bottom:12px; display:none; border: 1px solid rgba(255,255,255,0.3);"></div>
 
                             <div class="form-actions">
                                 <button type="button" class="btn btn-secondary" onclick="window.location.hash='#/dashboard'">Cancelar</button>
@@ -461,7 +465,7 @@ const Projects = {
                             <form id="edit-form" onsubmit="Projects.handleEditarProyecto(event, ${id})">
                                 <div class="form-section">
                                     <div class="section-icon-title">
-                                        <div class="sec-icon" style="background:rgba(37,99,235,0.1);color:#2563EB">📝</div>
+                                        <div class="sec-icon" style="background:rgba(84,131,179,0.15);color:#5483B3">📝</div>
                                         <div><h3>Requisitos del Proyecto</h3><p>Modifica los detalles de participación</p></div>
                                     </div>
                                     <div class="form-row">
@@ -481,7 +485,7 @@ const Projects = {
                                 </div>
                                 <div class="form-section">
                                     <div class="section-icon-title">
-                                        <div class="sec-icon" style="background:rgba(59,130,246,0.12);color:#3B82F6">⭐</div>
+                                        <div class="sec-icon" style="background:rgba(193,232,255,0.15);color:#C1E8FF">⭐</div>
                                         <div><h3>Habilidades Requeridas</h3><p>Al actualizar las habilidades, el sistema recalculará los perfiles compatibles.</p></div>
                                     </div>
                                     <div class="skills-tree-nav">

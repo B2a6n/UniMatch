@@ -1,21 +1,34 @@
-// ============================================
-// UniMatch — API Client (REST)
-// Reemplaza Firebase SDK con llamadas al backend Spring Boot
-// ============================================
-
+/**
+ * ============================================
+ * Archivo: firebase-config.js (Histórico/API Client)
+ * Resumen: Objeto central (API) para todas las comunicaciones con el servidor.
+ * Aunque mantiene el nombre histórico 'firebase-config.js', actualmente 
+ * reemplaza el SDK de Firebase implementando llamadas HTTP REST al backend Spring Boot.
+ * ============================================
+ */
 // Objeto central para todas las comunicaciones con el servidor
 const API = {
-    // URL base dinámica (detecta automáticamente si está en local, ngrok o AWS EC2)
-    BASE_URL: window.location.origin + '/api',
+    // URL base dinámica (actualmente apunta al túnel de Ngrok)
+    BASE_URL: 'https://antherless-fatally-tamica.ngrok-free.dev/api',
 
+    /**
+     * Obtiene el token de autenticación actual del localStorage.
+     */
     getToken() {
         return localStorage.getItem('unimatch_token');
     },
 
+    /**
+     * Guarda el token de autenticación en el localStorage.
+     * @param {string} token - El JWT o token de sesión.
+     */
     setToken(token) {
         localStorage.setItem('unimatch_token', token);
     },
 
+    /**
+     * Elimina los datos de sesión (token y usuario) del localStorage.
+     */
     clearToken() {
         localStorage.removeItem('unimatch_token');
         localStorage.removeItem('unimatch_user');
@@ -30,8 +43,13 @@ const API = {
         localStorage.setItem('unimatch_user', JSON.stringify(user));
     },
 
-    // Función genérica para peticiones fetch
-    // Incluye headers de seguridad y bypass de Ngrok
+    /**
+     * Función genérica para peticiones fetch HTTP.
+     * Incluye automáticamente cabeceras de seguridad, token de Auth y bypass de advertencias de Ngrok.
+     * @param {string} method - GET, POST, PUT, DELETE.
+     * @param {string} endpoint - Ruta relativa del endpoint.
+     * @param {Object} data - Datos JSON a enviar (opcional).
+     */
     async request(method, endpoint, data = null) {
         const headers = {
             'Content-Type': 'application/json',
@@ -47,7 +65,7 @@ const API = {
 
         try {
             const res = await fetch(this.BASE_URL + endpoint, config);
-
+            
             // Si la respuesta no es OK, intentamos obtener el mensaje de error del JSON
             if (!res.ok) {
                 let errorMsg = 'Error del servidor';
@@ -69,7 +87,7 @@ const API = {
             } catch (e) {
                 // Si la respuesta está vacía o no es JSON pero fue OK (200, 201, 204)
                 if (res.status === 204) return null;
-                return { success: true };
+                return { success: true }; 
             }
         } catch (e) {
             if (e.message === 'Failed to fetch') {
@@ -79,12 +97,17 @@ const API = {
         }
     },
 
+    // Shorthands para los diferentes métodos HTTP
     get(endpoint) { return this.request('GET', endpoint); },
     post(endpoint, data) { return this.request('POST', endpoint, data); },
     put(endpoint, data) { return this.request('PUT', endpoint, data); },
     delete(endpoint) { return this.request('DELETE', endpoint); },
 
-    // Subir imagen (multipart)
+    /**
+     * Sube un archivo de imagen al servidor utilizando FormData y formato multipart.
+     * @param {string} endpoint - Ruta del endpoint.
+     * @param {File} file - El archivo a subir.
+     */
     async uploadImage(endpoint, file) {
         const headers = { 'ngrok-skip-browser-warning': 'true' };
         const token = this.getToken();
@@ -106,8 +129,14 @@ const API = {
 };
 
 // ============================================
-// Utilidades globales
+// Utilidades globales: Funciones auxiliares disponibles en toda la app
 // ============================================
+
+/**
+ * Muestra una notificación temporal flotante en la pantalla.
+ * @param {string} message - El mensaje a mostrar.
+ * @param {string} type - Tipo de notificación ('info', 'success', 'error').
+ */
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -119,23 +148,36 @@ function showToast(message, type = 'info') {
     setTimeout(() => toast.remove(), 3500);
 }
 
+/**
+ * Genera iniciales a partir de un nombre completo (ej. "Juan Pérez" -> "JP").
+ */
 function getInitials(name) {
     if (!name) return '?';
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 }
 
+/**
+ * Formatea una fecha a un estilo local corto (ej. "10 oct 2023").
+ */
 function formatDate(dateStr) {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+/**
+ * Extrae y formatea solo la hora de una fecha (ej. "14:30").
+ */
 function formatTime(dateStr) {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
 }
 
+/**
+ * Calcula el porcentaje básico de coincidencia (match) entre dos listas de habilidades
+ * usando intersección simple de conjuntos.
+ */
 function calcMatch(userSkills, projectSkills) {
     if (!userSkills || !projectSkills || projectSkills.length === 0) return 0;
     const userSet = userSkills.map(s => s.toLowerCase());
@@ -154,7 +196,7 @@ function calcMatchCosineSimilarity(userSkills, projectSkills) {
 
     // 1. Crear un corpus único de todas las habilidades involucradas
     const allSkillsSet = new Set([
-        ...userSkills.map(s => s.toLowerCase()),
+        ...userSkills.map(s => s.toLowerCase()), 
         ...projectSkills.map(s => s.toLowerCase())
     ]);
     const corpus = Array.from(allSkillsSet);
@@ -177,10 +219,13 @@ function calcMatchCosineSimilarity(userSkills, projectSkills) {
 
     // 5. Calcular la similitud del coseno y convertirla a porcentaje (0-100)
     const cosineSimilarity = dotProduct / (magnitudeUser * magnitudeProject);
-
+    
     return Math.round(cosineSimilarity * 100);
 }
 
+/**
+ * Genera el HTML para un sistema de calificación de estrellas visual (1 a 5).
+ */
 function renderStars(n, max = 5) {
     let html = '';
     for (let i = 1; i <= max; i++) {
@@ -196,7 +241,7 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
-// Validaciones
+// Validaciones: Colección de utilidades para verificar inputs del usuario
 const Validators = {
     soloLetras(str) {
         return /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(str);
@@ -240,7 +285,7 @@ const Validators = {
 
     // Filtro de contenido inapropiado
     _forbiddenWords: ["puta", "pendejo", "mierda", "verga", "culero", "pito", "chingar", "droga", "marihuana", "cocaína", "arma", "violencia", "robo", "plagio", "estafa", "hacker", "hacking", "fraude", "bastardo", "idiota"],
-
+    
     contieneProfanidad(text) {
         if (!text) return false;
         const lowText = text.toLowerCase();

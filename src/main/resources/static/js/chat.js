@@ -1,7 +1,10 @@
-// ============================================
-// UniMatch — Chat Module (REST API + Polling)
-// ============================================
-
+/**
+ * ============================================
+ * Archivo: chat.js
+ * Resumen: Módulo encargado del sistema de mensajería (chat) entre usuarios.
+ * Maneja la renderización de la lista de conversaciones y el envío/recepción de mensajes.
+ * ============================================
+ */
 const Chat = {
     _currentChatUser: null,
     _pollInterval: null,
@@ -11,6 +14,7 @@ const Chat = {
     // Limpia intervalos de polling anteriores para evitar duplicados
     // ==========================================
     async renderChat(userId) {
+        // Obtenemos el contenedor principal de la aplicación
         const app = document.getElementById('app');
         Chat.stopPolling();
 
@@ -33,7 +37,10 @@ const Chat = {
         await Chat.loadConversations(userId);
     },
 
-    // Carga la lista de conversaciones activas del usuario
+    /**
+     * Carga la lista de conversaciones activas del usuario actual.
+     * @param {number} openUserId - ID del usuario con el que se desea abrir una conversación al cargar.
+     */
     async loadConversations(openUserId) {
         const container = document.getElementById('chat-items');
         try {
@@ -73,7 +80,10 @@ const Chat = {
         }
     },
 
-    // Abre una conversación específica e inicia el polling
+    /**
+     * Abre una conversación específica e inicia el polling para buscar nuevos mensajes.
+     * @param {number} otherUserId - ID del usuario con el que se quiere chatear.
+     */
     async openConversation(otherUserId) {
         const user = App.currentUser;
         Chat._currentChatUser = otherUserId;
@@ -113,7 +123,10 @@ const Chat = {
         Chat._pollInterval = setInterval(() => Chat.loadMessages(), 3000);
     },
 
-    // Consulta nuevos mensajes al backend y desplaza el scroll
+    /**
+     * Consulta nuevos mensajes al backend para la conversación actual.
+     * Desplaza el scroll hacia abajo automáticamente si el usuario ya estaba al final de la conversación.
+     */
     async loadMessages() {
         if (!Chat._currentChatUser) return;
         const messagesContainer = document.getElementById('chat-messages');
@@ -145,6 +158,9 @@ const Chat = {
         } catch (e) { console.error('Chat error:', e); }
     },
 
+    /**
+     * Envía un mensaje de texto al usuario actual seleccionado en el chat.
+     */
     async sendMessage() {
         const input = document.getElementById('chat-text-input');
         const text = input.value.trim();
@@ -156,7 +172,11 @@ const Chat = {
         } catch (e) { showToast('Error al enviar', 'error'); }
     },
 
-    // Gestión de envío de imágenes con conversión a Base64
+    /**
+     * Gestión de envío de imágenes en el chat.
+     * Convierte la imagen seleccionada a Base64 antes de enviarla.
+     * @param {Event} event - Evento disparado por el input type="file".
+     */
     async sendImage(event) {
         const file = event.target.files[0];
         if (!file) return;

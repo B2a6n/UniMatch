@@ -1,9 +1,19 @@
-// ============================================
-// UniMatch — Profile & Expediente Module (REST API)
-// ============================================
-
+/**
+ * ============================================
+ * Archivo: profile.js
+ * Resumen: Módulo encargado de renderizar y gestionar el perfil del usuario.
+ * Muestra el expediente digital, estadísticas, evaluaciones, 
+ * y permite la edición de habilidades y datos básicos.
+ * ============================================
+ */
 const Profile = {
 
+    /**
+     * Renderiza la página de perfil de un usuario.
+     * Si no se provee userId, renderiza el perfil del usuario logueado (propio).
+     * Carga estadísticas, expediente y proyectos dirigidos desde la API.
+     * @param {number} [userId] - ID opcional del usuario a visualizar.
+     */
     async renderPerfil(userId) {
         const app = document.getElementById('app');
         const user = App.currentUser;
@@ -66,7 +76,7 @@ const Profile = {
                     <div class="dashboard-content">
                         <div class="profile-page">
                             <div class="profile-hero">
-                                <button class="back-btn" onclick="window.history.back()" style="position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.06); border:none; color:var(--text-white); width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; z-index:10; transition: background 0.3s;" onmouseover="this.style.background='rgba(0,0,0,0.12)'" onmouseout="this.style.background='rgba(0,0,0,0.06)'">←</button>
+                                <button class="back-btn" onclick="window.history.back()" style="position:absolute; top:20px; left:20px; background:rgba(255,255,255,0.1); border:none; color:white; width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.2rem; z-index:10; transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">←</button>
                                 <div class="profile-avatar-lg">${getInitials(profile.nombre)}</div>
                                 <h2>${escapeHtml(profile.nombre)}</h2>
                                 <p class="profile-subtitle">${escapeHtml(profile.carrera || '')} ${profile.semestre ? '• ' + profile.semestre + '° Semestre' : ''} ${profile.rol === 'maestro' ? '• 🎓 Maestro' : ''}</p>
@@ -103,6 +113,11 @@ const Profile = {
         }
     },
 
+    /**
+     * Abre el modal de edición de perfil.
+     * Permite al usuario actual modificar su carrera, semestre y habilidades.
+     * El nombre y la matrícula permanecen bloqueados (deshabilitados).
+     */
     async editProfile() {
         const user = App.currentUser;
         const habilidades = Array.isArray(user.habilidades) ? user.habilidades : (typeof user.habilidades === 'string' ? user.habilidades.split(',') : []);
@@ -123,7 +138,7 @@ const Profile = {
                     <div class="form-row mb-16">
                         <div class="input-group">
                             <label>Nombre</label>
-                            <input type="text" class="input-field" value="${escapeHtml(user.nombre)}" disabled style="background:rgba(0,0,0,0.04); color:var(--text-dim); border-color:var(--border-color);">
+                            <input type="text" class="input-field" value="${escapeHtml(user.nombre)}" disabled style="background:rgba(255,255,255,0.05); color:var(--text-dim);">
                             <small class="text-muted">El nombre institucional no puede ser modificado.</small>
                         </div>
                     </div>
@@ -187,6 +202,10 @@ const Profile = {
 
     _editSkills: [],
     
+    /**
+     * Maneja el cambio de categoría en el select de sugerencias de habilidades.
+     * Actualiza la lista visual de sugerencias basadas en la categoría elegida.
+     */
     onSkillCategoryChange() {
         const cat = document.getElementById('edit-skill-category').value;
         const container = document.getElementById('edit-skill-suggestions');
@@ -209,6 +228,9 @@ const Profile = {
         `).join('');
     },
 
+    /**
+     * Agrega una habilidad personalizada ingresada en el input de texto.
+     */
     _addEditSkill() { 
         const input = document.getElementById('edit-skill-input'); 
         const s = input.value.trim(); 
@@ -220,6 +242,9 @@ const Profile = {
         input.focus(); 
     },
     
+    /**
+     * Agrega una habilidad seleccionada directamente de las sugerencias predefinidas.
+     */
     _addEditSkillDirect(s) { 
         if (!Profile._editSkills.includes(s)) { 
             Profile._editSkills.push(s); 
@@ -227,15 +252,25 @@ const Profile = {
         } 
     },
     
+    /**
+     * Elimina una habilidad de la lista temporal de edición.
+     */
     _removeEditSkill(s) { 
         Profile._editSkills = Profile._editSkills.filter(x => x !== s); 
         Profile._renderEditSkillTags(); 
     },
     
+    /**
+     * Renderiza en el DOM la lista actual de etiquetas de habilidades en edición.
+     */
     _renderEditSkillTags() { 
         document.getElementById('edit-skills-tags').innerHTML = Profile._editSkills.map(s => `<span class="tag tag-purple tag-removable" onclick="Profile._removeEditSkill('${s}')">${s} ✕</span>`).join(''); 
     },
 
+    /**
+     * Guarda los cambios del perfil en el backend (carrera, semestre y habilidades).
+     * Actualiza el localStorage y recarga la vista al finalizar.
+     */
     async _saveProfile() {
         const carrera = document.getElementById('edit-carrera').value;
         const semestre = document.getElementById('edit-semestre').value;
