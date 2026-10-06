@@ -8,8 +8,8 @@
  */
 // Objeto central para todas las comunicaciones con el servidor
 const API = {
-    // URL base dinámica (actualmente apunta al túnel de Ngrok)
-    BASE_URL: 'https://antherless-fatally-tamica.ngrok-free.dev/api',
+    // URL base del backend en Render
+    BASE_URL: 'https://unimatch-web.onrender.com/api',
 
     /**
      * Obtiene el token de autenticación actual del localStorage.
