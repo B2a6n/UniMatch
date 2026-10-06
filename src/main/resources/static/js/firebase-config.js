@@ -52,8 +52,7 @@ const API = {
      */
     async request(method, endpoint, data = null) {
         const headers = {
-            'Content-Type': 'application/json',
-            'ngrok-skip-browser-warning': 'true'
+            'Content-Type': 'application/json'
         };
         const token = this.getToken();
         if (token) headers['Authorization'] = 'Bearer ' + token;
@@ -109,7 +108,7 @@ const API = {
      * @param {File} file - El archivo a subir.
      */
     async uploadImage(endpoint, file) {
-        const headers = { 'ngrok-skip-browser-warning': 'true' };
+        const headers = {};
         const token = this.getToken();
         if (token) headers['Authorization'] = 'Bearer ' + token;
 
